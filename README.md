@@ -8,7 +8,11 @@
 Работающее приложение: [mycloud.mu56.ru](https://mycloud.mu56.ru/).
 API: [cloud.mu56.ru](https://cloud.mu56.ru/api/users/csrf/).
 
-`My Cloud` — это современное полнофункциональное веб-приложение (Single Page Application) для персонального облачного хранения и совместного использования файлов. Проект представляет собой полноценный Fullstack продукт с мощным REST API на Django и интерактивным интерфейсом на React + TypeScript с премиальным Glassmorphism дизайном.
+`My Cloud` — персональное файловое хранилище: REST API на Django REST Framework и PostgreSQL, клиент на React и TypeScript. Можно загружать, искать, переименовывать и скачивать файлы, добавлять комментарии и создавать публичные ссылки.
+
+Backend работает в Docker на Ubuntu VDS с Gunicorn, Nginx и HTTPS. Frontend размещён на GitHub Pages и публикуется через GitHub Actions. В демо установлены ограничения: до 20 МиБ на файл и 100 МиБ на пользователя.
+
+Автор: **Дмитрий Морозов** · [Telegram](https://t.me/dem2014) · [GitHub](https://github.com/dm-morozov) · [Резюме](https://github.com/dm-morozov/resume-fullstack-py-js).
 
 ---
 
@@ -23,7 +27,7 @@ API: [cloud.mu56.ru](https://cloud.mu56.ru/api/users/csrf/).
   * Inline-редактирование (переименование файлов и изменение комментариев) без перезагрузки страниц.
   * Удаление файлов из базы данных и с диска.
 * **Публичный доступ (Шеринг)**:
-  * Генерация уникальной зашифрованной публичной ссылки для любого файла в один клик.
+  * Генерация уникальной публичной ссылки с токеном доступа для файла.
   * Автоматическое копирование ссылки в буфер обмена.
   * Специальный публичный роут для скачивания файлов гостями системы (без необходимости авторизации).
 
@@ -51,7 +55,7 @@ API: [cloud.mu56.ru](https://cloud.mu56.ru/api/users/csrf/).
 * **Vite 8** — быстрый инструмент сборки и среда разработки.
 * **Redux Toolkit** — централизованное управление состоянием приложения (`authSlice`, `filesSlice`, `adminSlice`).
 * **React Router 7** — организация роутинга и защищенных маршрутов (Protected Routes).
-* **CSS Modules (Vanilla CSS)** — стилизация компонентов с изоляцией классов, эффектом матового стекла (Glassmorphism), градиентами и плавными микро-анимациями.
+* **CSS Modules (Vanilla CSS)** — изолированные стили компонентов, общие цветовые переменные и адаптивная вёрстка. Принципы интерфейса описаны в [frontend-design.md](docs/architecture/frontend-design.md).
 
 ---
 
@@ -102,8 +106,8 @@ API: [cloud.mu56.ru](https://cloud.mu56.ru/api/users/csrf/).
 
 ### 1. Клонирование репозитория
 ```bash
-git clone <URL_РЕПОЗИТОРИЯ>
-cd <ИМЯ_ПАПКИ>
+git clone https://github.com/dm-morozov/my-cloud.git
+cd my-cloud
 ```
 
 ### 2. Настройка и запуск Backend
@@ -236,7 +240,7 @@ cd <ИМЯ_ПАПКИ>
 
 * **Изоляция медиафайлов при тестах**: тесты модуля `files` используют временные переопределяемые директории для хранения тестовых файлов, что гарантирует чистоту основного `MEDIA_ROOT`.
 * **Валидация на фронтенде и бэкенде**: формы регистрации, авторизации и переименования проходят многоуровневую проверку (на длину полей, формат почты, пароль, наличие спецсимволов).
-* **Стеклянный интерфейс (Glassmorphism)**: все модальные окна, списки и панели используют CSS-свойство `backdrop-filter: blur(...)` для создания стильного полупрозрачного размытия в сочетании с плавной сменой состояний.
+* **Разделение ответственности на frontend**: API-клиент находится в `services/`, состояние — в Redux-срезах, интерфейс собирается из страниц и переиспользуемых компонентов. Формы имеют видимые подписи, модальное окно поддерживает клавиатуру и восстановление фокуса.
 
 ---
 
@@ -262,71 +266,13 @@ cd <ИМЯ_ПАПКИ>
 * Старое развёртывание ниже приведено для истории. Не применять его конфигурацию к новому серверу.
 
 ### Схема развертывания
-Приложение развернуто на виртуальном сервере (Ubuntu 24.04 LTS) под управлением **Nginx** и **Gunicorn**:
-* **Nginx** работает как обратный прокси (Reverse Proxy) для Django (Gunicorn) и напрямую раздает статические файлы собранного React-приложения (`frontend/dist`) и медиафайлы из `storage/media/`.
-* **Gunicorn** запущен в виде системного демона `systemd` и прослушивает локальный порт `127.0.0.1:8000` для обработки API-запросов.
-* В качестве СУБД используется **PostgreSQL**, развернутый локально на сервере.
 
-### Основные этапы настройки сервера:
-1. **Настройка Swap**: так как сервер имеет 1 ГБ оперативной памяти, был создан swap-файл объемом 2 ГБ для предотвращения падения процессов из-за нехватки памяти (OOM) во время сборки фронтенда.
-2. **Настройка Gunicorn (`/etc/systemd/system/gunicorn.service`)**:
-   ```ini
-   [Unit]
-   Description=gunicorn daemon for My Cloud backend
-   After=network.target
+- **Frontend**: GitHub Pages, собственный домен `mycloud.mu56.ru`, сборка и публикация через GitHub Actions.
+- **Backend**: Ubuntu 24.04 LTS на Selectel VDS, отдельный Compose-проект в `/srv/projects/mycloud` с сервисами Django/Gunicorn, PostgreSQL и Nginx gateway.
+- **HTTPS**: серверный Nginx принимает запросы к `cloud.mu56.ru` и передаёт их на loopback-порт gateway. База данных не публикуется наружу.
+- **Данные**: PostgreSQL и загруженные файлы хранятся в постоянных Docker volumes.
 
-   [Service]
-   User=root
-   WorkingDirectory=/root/netology_78_cloud-file-storage-graduation-project/backend
-   ExecStart=/root/netology_78_cloud-file-storage-graduation-project/backend/.venv/bin/gunicorn \
-             --workers 3 \
-             --bind 127.0.0.1:8000 \
-             config.wsgi:application
-
-   [Install]
-   WantedBy=multi-user.target
-   ```
-3. **Конфигурация Nginx (`/etc/nginx/sites-available/default`)**:
-   ```nginx
-   server {
-       listen 80 default_server;
-       listen [::]:80 default_server;
-
-       server_name 80.78.254.193;
-       client_max_body_size 500M;
-
-       # 1. Раздача фронтенда (React SPA)
-       location / {
-           root /root/netology_78_cloud-file-storage-graduation-project/frontend/dist;
-           index index.html;
-           try_files $uri $uri/ /index.html;
-       }
-
-       # 2. Раздача медиафайлов
-       location /media/ {
-           alias /root/netology_78_cloud-file-storage-graduation-project/backend/storage/media/;
-       }
-
-       # 3. Раздача статики бэкенда (админка Django)
-       location /static/ {
-           alias /root/netology_78_cloud-file-storage-graduation-project/backend/storage/static/;
-       }
-
-       # 4. Проксирование API-запросов к Django
-       location /api/ {
-           proxy_set_header Host $http_host;
-           proxy_set_header X-Real-IP $remote_addr;
-           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-           proxy_set_header X-Forwarded-Proto $scheme;
-           proxy_pass http://127.0.0.1:8000;
-       }
-   }
-   ```
-4. **Настройка прав доступа**: для обеспечения доступа Nginx (`www-data`) к файлам сборки в `/root` были выполнены команды:
-   ```bash
-   chmod +x /root
-   chmod -R o+rx /root/netology_78_cloud-file-storage-graduation-project
-   ```
+Команды запуска, переменные окружения и настройки доменов: [руководство по развёртыванию](docs/deployment/docker-pages.md).
 
 ---
 
@@ -342,6 +288,6 @@ cd <ИМЯ_ПАПКИ>
 
 ---
 
-## Лицензия
+## Происхождение проекта
 
-Учебный проект в рамках дипломной работы Netology.
+Создан как дипломный проект Нетологии и развивается самостоятельно. Материалы обучения сохранены в `docs/netology/`. Отдельный файл лицензии не добавлен.
