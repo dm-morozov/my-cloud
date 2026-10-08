@@ -55,7 +55,7 @@ export const LoginForm = () => {
 
   return (
     <div className={styles.container}>
-      <h2>Войти в My Cloud</h2>
+      <h1>Войти в My Cloud</h1>
       <p className={styles.intro}>С возвращением. Ваши файлы на своём месте.</p>
       {error && <ErrorView message={error} />}
 

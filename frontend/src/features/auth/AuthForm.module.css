@@ -6,7 +6,7 @@
   border: 1px solid var(--line);
   border-radius: 10px;
 }
-.container h2 {
+.container h1 {
   font-family: Georgia, serif;
   font-size: 34px;
   font-weight: 400;
@@ -64,7 +64,7 @@
     margin: 0 auto;
     padding: 26px 20px;
   }
-  .container h2 {
+  .container h1 {
     font-size: 29px;
   }
 }

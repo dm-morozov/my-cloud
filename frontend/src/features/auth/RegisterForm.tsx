@@ -80,7 +80,7 @@ export const RegisterForm = () => {
 
   return (
     <div className={styles.container}>
-      <h2>Ваше новое облако</h2>
+      <h1>Ваше новое облако</h1>
       <p className={styles.intro}>
         Личное пространство для ваших файлов. Начните с создания аккаунта.
       </p>
