@@ -5,6 +5,9 @@
 Актуальный запуск: [Docker backend и GitHub Pages frontend](docs/deployment/docker-pages.md).
 Репозиторий: [dm-morozov/my-cloud](https://github.com/dm-morozov/my-cloud).
 
+Работающее приложение: [mycloud.mu56.ru](https://mycloud.mu56.ru/).
+API: [cloud.mu56.ru](https://cloud.mu56.ru/api/users/csrf/).
+
 `My Cloud` — это современное полнофункциональное веб-приложение (Single Page Application) для персонального облачного хранения и совместного использования файлов. Проект представляет собой полноценный Fullstack продукт с мощным REST API на Django и интерактивным интерфейсом на React + TypeScript с премиальным Glassmorphism дизайном.
 
 ---
