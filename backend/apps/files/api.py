@@ -1,8 +1,8 @@
-from django.http import FileResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from common.downloads import file_response
 from rest_framework.exceptions import PermissionDenied, NotFound
 from django.urls import path, reverse
 
@@ -136,10 +136,10 @@ class FileDownloadApi(APIView):
 
             inline = request.query_params.get("inline", "false").lower() == "true"
 
-            return FileResponse(
+            return file_response(
+                stored_file,
                 file_handle,  # открываем файл для чтения в бинарном режиме
-                as_attachment=not inline,  # если inline=true, отдаем для просмотра в браузере
-                filename=stored_file.original_name,
+                requested_inline=inline,
             )
 
         # когда файл не найден или когда у пользователя нет прав

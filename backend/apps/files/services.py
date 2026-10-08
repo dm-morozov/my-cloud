@@ -8,12 +8,17 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 
 from rest_framework.exceptions import PermissionDenied, NotFound
+from rest_framework.exceptions import ValidationError
+from django.conf import settings
+from django.db import transaction
+from django.db.models import Sum
 
 logger = logging.getLogger(__name__)  # Получаем логгер для текущего модуля
 
 User = get_user_model()
 
 
+@transaction.atomic
 def upload_file(*, owner, uploaded_file, comment=""):
     """
     Сохраняет загруженный пользователем файл на диск и создаёт запись в БД.
@@ -25,6 +30,13 @@ def upload_file(*, owner, uploaded_file, comment=""):
         owner.username,
         uploaded_file.name,
     )
+
+    User.objects.select_for_update().get(pk=owner.pk)
+    used_bytes = owner.files.aggregate(total=Sum("size"))["total"] or 0
+    if uploaded_file.size > settings.MAX_UPLOAD_BYTES:
+        raise ValidationError("Файл превышает допустимый размер.")
+    if used_bytes + uploaded_file.size > settings.MAX_USER_STORAGE_BYTES:
+        raise ValidationError("Недостаточно места в хранилище.")
 
     original_name = uploaded_file.name
     suffix = Path(original_name).suffix

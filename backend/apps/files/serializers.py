@@ -1,10 +1,16 @@
 from rest_framework import serializers
+from django.conf import settings
 from .models import StoredFile
 
 
 class UploadFileSerializer(serializers.Serializer):
     file = serializers.FileField()
     comment = serializers.CharField(required=False, allow_blank=True)
+
+    def validate_file(self, value):
+        if value.size > settings.MAX_UPLOAD_BYTES:
+            raise serializers.ValidationError("Файл превышает допустимый размер.")
+        return value
 
 
 class StoredFileCreateResponseSerializer(serializers.ModelSerializer):

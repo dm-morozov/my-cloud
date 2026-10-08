@@ -5,6 +5,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound, PermissionDenied
 
 from django.urls import path
+from django.http import JsonResponse
+from django.middleware.csrf import get_token
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_GET
 
 from common.permissions import IsStaffUser
 
@@ -47,6 +52,14 @@ class RegisterApi(APIView):
         )
 
 
+@require_GET
+def csrf_token(request):
+    response = JsonResponse({"csrfToken": get_token(request)})
+    response["Cache-Control"] = "no-store"
+    return response
+
+
+@method_decorator(csrf_protect, name="dispatch")
 class LoginApi(APIView):
 
     def post(self, request, *args, **kwargs):
@@ -147,6 +160,7 @@ class AdminUserDetailApi(APIView):
 
 
 urlpatterns = [
+    path("csrf/", csrf_token, name="csrf-token"),
     path("register/", RegisterApi.as_view(), name="register"),
     path("login/", LoginApi.as_view(), name="login"),
     path("me/", MeApi.as_view(), name="me"),

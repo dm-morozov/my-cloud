@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
 import { HomePage } from './pages/HomePage'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
@@ -14,6 +14,7 @@ import Spinner from './components/Spinner/Spinner'
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute'
 
 const App = () => {
+  const Router = import.meta.env.VITE_HASH_ROUTER === 'true' ? HashRouter : BrowserRouter
   // Достаем флаг загрузки
   const isLoading = useAppSelector((state) => state.auth.isLoading)
 
@@ -43,7 +44,7 @@ const App = () => {
   }
 
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         {/* Родительский роут - наш каркас. Он оборачивает всё внутри */}
         <Route element={<MainLayout />}>
@@ -72,7 +73,7 @@ const App = () => {
           />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </Router>
   )
 }
 

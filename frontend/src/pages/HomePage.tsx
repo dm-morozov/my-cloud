@@ -35,7 +35,7 @@ export const HomePage = () => {
       {/* Секция статистики */}
       <section className={styles.statsSection}>
         <div className={styles.statItem}>
-          <div className={styles.statValue}>500 МБ</div>
+          <div className={styles.statValue}>20 МиБ</div>
           <div className={styles.statLabel}>Максимальный размер файла</div>
         </div>
         <div className={styles.statItem}>

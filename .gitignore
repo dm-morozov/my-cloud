@@ -44,10 +44,13 @@ coverage/
 .env
 .env.*
 !.env.example
+!.env.deploy.example
 .env.local
 
 # Logs
 *.log
+*.deploy.tar.gz
+docs/.obsidian/workspace.json
 
 # Project workspace
 docs/workspace/**

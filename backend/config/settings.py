@@ -178,3 +178,14 @@ CSRF_TRUSTED_ORIGINS = config(
     default="http://localhost:5173,http://127.0.0.1:5173",
     cast=Csv()
 )
+
+# The trusted host proxy overwrites X-Forwarded-Proto.
+if config("TRUST_PROXY", default=False, cast=bool):
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SESSION_COOKIE_SECURE = config("COOKIE_SECURE", default=False, cast=bool)
+CSRF_COOKIE_SECURE = SESSION_COOKIE_SECURE
+SESSION_COOKIE_SAMESITE = config("COOKIE_SAMESITE", default="Lax")
+CSRF_COOKIE_SAMESITE = SESSION_COOKIE_SAMESITE
+SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", default=False, cast=bool)
+MAX_UPLOAD_BYTES = config("MAX_UPLOAD_BYTES", default=20 * 1024 * 1024, cast=int)
+MAX_USER_STORAGE_BYTES = config("MAX_USER_STORAGE_BYTES", default=100 * 1024 * 1024, cast=int)
