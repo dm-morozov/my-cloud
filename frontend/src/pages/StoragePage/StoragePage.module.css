@@ -1,651 +1,271 @@
-/* Основной контейнер страницы */
 .container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 0 20px;
+  width: 100%;
+  margin: 0 auto;
 }
-
-/* Красивый заголовок с градиентным акцентом */
 .title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 24px;
-  position: relative;
-  display: inline-block;
-}
-
-.title::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  width: 40px;
-  height: 4px;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  border-radius: 2px;
-}
-
-/* Секция списка файлов */
-.section {
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow:
-    0 4px 6px -1px rgb(0 0 0 / 0.05),
-    0 2px 4px -2px rgb(0 0 0 / 0.05);
-  border: 1px solid #f1f5f9;
-}
-
-.sectionTitle {
-  font-size: 1.1rem;
-  color: #64748b;
-  margin-bottom: 16px;
+  font-size: 34px;
+  letter-spacing: -1.3px;
   font-weight: 500;
+  margin: 0 0 12px;
 }
-
-/* Список (ul) */
+.summary {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0 0 32px;
+}
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 20px;
+}
+.search {
+  width: min(300px, 100%);
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: var(--surface);
+}
+.section {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 24px;
+}
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+}
 .list {
   list-style: none;
-  padding: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  padding: 0;
 }
-
-/* Карточка отдельного файла */
 .listItem {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) minmax(100px, 0.7fr) auto;
+  gap: 18px;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  transition: all 0.2s ease-in-out;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
 }
-
-.listItem:hover {
-  background-color: #f8fafc; /* Очень мягкий серый фоновый оттенок */
-  border-color: #93c5fd; /* Мягкая синяя подсветка рамки */
-}
-
 .fileMainInfo {
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
-
-/* Имя файла */
 .fileName {
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 600;
-  color: #0f172a;
+  overflow-wrap: anywhere;
 }
-
-/* Размер файла и метаданные */
 .fileSize {
-  font-size: 0.85rem;
-  color: #64748b;
+  color: var(--muted);
+  font-size: 11px;
 }
-
-/* Пустое состояние хранилища */
-.emptyList {
-  text-align: center;
-  padding: 40px 20px;
-  background-color: #f8fafc;
-  border: 2px dashed #cbd5e1;
-  border-radius: 16px;
-  color: #64748b;
-  font-size: 0.95rem;
-}
-
-/* Ссылка в пустом состоянии */
-.emptyLink {
-  color: #3b82f6;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.15s ease;
-}
-
-.emptyLink:hover {
-  color: #1d4ed8;
-  text-decoration: underline;
-}
-
-/* Контейнер для кнопок управления файлом */
 .fileActions {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
-
-/* Стилизация кнопки удаления файла */
+.deleteButton,
+.downloadButton,
+.viewButton,
+.shareButton,
+.copyLinkButton {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--ink);
+}
+.fileActions button:hover {
+  background: var(--accent-soft);
+  border-color: #abbdae;
+}
 .deleteButton {
-  padding: 8px 14px;
-  font-size: 0.85rem;
-  font-weight: 550;
-  border-radius: 8px;
-  border: 1px solid #fee2e2;
-  background-color: #fef2f2;
-  color: #ef4444;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  color: var(--danger);
 }
-
-.deleteButton:hover {
-  background-color: #ef4444;
-  color: #ffffff;
-  border-color: #ef4444;
-  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);
+.shareStatus {
+  color: var(--accent);
+  font-size: 12px;
+  padding: 8px;
 }
-
-/* Стилизация кнопки скачивания файла */
-.downloadButton {
-  padding: 8px 14px;
-  font-size: 0.85rem;
-  font-weight: 550;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  background-color: #eff6ff;
-  color: #3b82f6;
-  border: 1px solid #dbeafe;
-}
-/* Эффект при наведении курсора */
-.downloadButton:hover {
-  background-color: #3b82f6;
-  color: #ffffff;
-  border-color: #3b82f6;
-  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
-}
-
-/* Стилизация кнопки просмотра файла inline */
-.viewButton {
-  padding: 8px 14px;
-  font-size: 0.85rem;
-  font-weight: 550;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  background-color: #f0fdf4;
-  color: #16a34a;
-  border: 1px solid #dcfce7;
-}
-
-.viewButton:hover {
-  background-color: #16a34a;
-  color: #ffffff;
-  border-color: #16a34a;
-  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.25);
-}
-
-/* Обертка для inline-редактирования */
-.inlineEditWrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  max-width: 400px;
-}
-
-/* Поле ввода для редактирования */
-.editInput {
-  flex-grow: 1;
-  padding: 6px 12px;
-  font-size: 0.9rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  outline: none;
-  transition: all 0.2s ease-in-out;
-}
-
-.editInput:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
-}
-
-/* Компактные кнопки сохранения (✓) и отмены (✗) */
-.saveBtn,
-.cancelBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: bold;
-  transition: all 0.2s ease-in-out;
-}
-
-/* Зеленая кнопка сохранения */
-.saveBtn {
-  background-color: #dcfce7;
-  color: #16a34a;
-  border-color: #bbf7d0;
-}
-
-.saveBtn:hover:not(:disabled) {
-  background-color: #16a34a;
-  color: #ffffff;
-  border-color: #16a34a;
-}
-
-.saveBtn:disabled {
-  background-color: #f1f5f9;
-  color: #94a3b8;
-  border-color: #e2e8f0;
-  cursor: not-allowed;
-}
-
-/* Красная кнопка отмены */
-.cancelBtn {
-  background-color: #fee2e2;
-  color: #dc2626;
-  border-color: #fecaca;
-}
-
-.cancelBtn:hover {
-  background-color: #dc2626;
-  color: #ffffff;
-  border-color: #dc2626;
-}
-
-/* Кнопка-карандаш для запуска редактирования */
-.iconBtn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.9rem;
+.publicBadge {
+  color: var(--accent);
   margin-left: 8px;
-  padding: 4px;
-  border-radius: 4px;
-  transition: all 0.2s ease-in-out;
-  opacity: 0.6;
+  font-size: 10px;
 }
-
-.iconBtn:hover {
-  background-color: #f1f5f9;
-  opacity: 1;
+.commentSection {
+  min-width: 0;
 }
-
-/* Кнопка "+ Добавить комментарий" */
-.addCommentBtn {
-  background: none;
-  border: 1px dashed #cbd5e1;
-  padding: 4px 10px;
-  font-size: 0.8rem;
-  color: #64748b;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.addCommentBtn:hover {
-  background-color: #f1f5f9;
-  color: #0f172a;
-  border-color: #94a3b8;
-}
-
-/* Контейнер для текста комментария и кнопки карандаша */
 .commentValueWrapper {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 4px;
 }
-
-/* Красивая плашка под сам текст комментария */
 .commentText {
-  font-size: 0.85rem;
-  padding: 6px 12px;
-  background-color: #f1f5f9; /* Мягкий серый фон */
-  color: #475569; /* Серый текст */
-  border-radius: 12px; /* Мягкие скругления */
-  display: inline-block;
-  max-width: 400px;
-  word-break: break-word; /* Чтобы длинные слова не ломали верстку */
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
 }
-
-/* ЗАГРУЗКА ФАЙЛА Drag-and-Drop*/
-
-/* Форма загрузки вверху страницы */
+.iconBtn {
+  background: none;
+  border: 0;
+  padding: 4px;
+  color: var(--muted);
+  margin-left: 6px;
+}
+.addCommentBtn {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 11px;
+  padding: 4px 0;
+}
+.inlineEditWrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+.editInput {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 13px;
+}
+.saveBtn,
+.cancelBtn {
+  border: 0;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 7px;
+  border-radius: 4px;
+}
+.cancelBtn {
+  color: var(--danger);
+}
+.emptyList {
+  color: var(--muted);
+  text-align: center;
+  padding: 60px 15px;
+  line-height: 1.9;
+  font-size: 14px;
+}
+.emptyLink {
+  color: var(--accent);
+}
 .uploadForm {
   margin-bottom: 32px;
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 24px;
-  border: 1px solid #f1f5f9;
-  box-shadow:
-    0 4px 6px -1px rgb(0 0 0 / 0.05),
-    0 2px 4px -2px rgb(0 0 0 / 0.05);
 }
-
-/* Общая область Dropzone */
 .dropzone {
-  border: 2px dashed #cbd5e1;
-  border-radius: 12px;
-  padding: 32px 20px;
-  text-align: center;
-  background-color: #f8fafc;
+  border: 1px dashed #a5b4a7;
+  border-radius: 8px;
+  background: #edf1e9;
+  padding: 30px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
 }
-
-/* Наведение на Dropzone */
-.dropzone:hover {
-  border-color: #93c5fd;
-  background-color: #f0f7ff;
+.dropzone:hover,
+.dragActive {
+  border-color: var(--accent);
+  background: #e4ebdf;
 }
-
-/* Когда файл перетаскивают над зоной */
-.dropzone.dragActive {
-  border-color: #3b82f6;
-  background-color: #eff6ff;
-  transform: scale(1.01);
-  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.15);
-}
-
-/* Когда файл уже выбран */
-.dropzone.hasFile {
+.hasFile {
   border-style: solid;
-  border-color: #86efac;
-  background-color: #f0fdf4;
 }
-
-.dropzone.hasFile:hover {
-  border-color: #4ade80;
-  background-color: #f0fdf4;
-}
-
-/* Скрытый инпут */
 .hiddenFileInput {
   display: none;
 }
-
 .dropzoneContent {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 18px;
 }
-
-/* Анимация парения облачка */
 .uploadIcon {
-  font-size: 2.5rem;
-  line-height: 1;
-  transition: transform 0.3s ease;
+  color: var(--accent);
 }
-
-.dropzone:hover .uploadIcon {
-  transform: translateY(-4px);
-}
-
 .dropzoneText {
-  font-size: 0.95rem;
-  color: #475569;
-  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  overflow-wrap: anywhere;
 }
-
 .dropzoneText strong {
-  color: #3b82f6;
+  color: var(--ink);
+  font-weight: 500;
 }
-
-.dropzone.hasFile .dropzoneText strong {
-  color: #16a34a;
-}
-
-/* Детали загрузки (комментарий и кнопки) с плавной анимацией появления */
 .uploadDetails {
-  margin-top: 18px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 16px;
-  animation: slideDown 0.3s ease-out;
+  margin-top: 16px;
 }
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Поле ввода комментария к загрузке */
 .uploadCommentInput {
-  padding: 10px 14px;
-  font-size: 0.9rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  outline: none;
-  transition: all 0.2s ease;
-  background-color: #ffffff;
+  flex: 1;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 12px;
 }
-
-.uploadCommentInput:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
-}
-
 .uploadActions {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
-
-/* Премиальная синяя кнопка загрузки */
-.submitUploadBtn {
-  padding: 10px 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #ffffff;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-}
-
-.submitUploadBtn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
-}
-
-.submitUploadBtn:active {
-  transform: translateY(0);
-}
-
-/* Кнопка отмены */
+.submitUploadBtn,
 .cancelUploadBtn {
-  padding: 10px 20px;
-  font-size: 0.9rem;
-  font-weight: 550;
-  color: #64748b;
-  background-color: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent);
+  color: white;
+  padding: 12px 16px;
+  font-size: 13px;
 }
-
-.cancelUploadBtn:hover {
-  background-color: #e2e8f0;
-  color: #334155;
+.cancelUploadBtn {
+  border-color: var(--line);
+  color: var(--muted);
+  background: transparent;
 }
-
-/* Стилизация кнопки "Поделиться" */
-.shareButton {
-  padding: 8px 14px;
-  font-size: 0.85rem;
-  font-weight: 550;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  background-color: #faf5ff;
-  color: #a855f7;
-  border: 1px solid #f3e8ff;
-}
-
-/* Эффект наведения для кнопки "Поделиться" */
-.shareButton:hover {
-  background-color: #a855f7;
-  color: #ffffff;
-  border-color: #a855f7;
-  box-shadow: 0 4px 10px rgba(168, 85, 247, 0.25);
-}
-
-/* Статус "Ссылка скопирована!" (заменяет кнопку на 2 секунды) */
-.shareStatus {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 14px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #16a34a;
-  background-color: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  border-radius: 8px;
-  animation: fadeInShareStatus 0.2s ease-out; /* Плавное проявление */
-}
-
-/* Анимация плавного появления плашки статуса */
-@keyframes fadeInShareStatus {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Маленький зеленый значок "Публичный" рядом с размером */
-.publicBadge {
-  margin-left: 8px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 2px 6px;
-  background-color: #f0fdf4;
-  color: #16a34a;
-  border: 1px solid #bbf7d0;
-  border-radius: 4px;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-}
-
-/* Кнопка быстрого копирования уже созданной ссылки */
-.copyLinkButton {
-  padding: 8px 14px;
-  font-size: 0.85rem;
-  font-weight: 550;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  background-color: #f0fdf4;
-  color: #16a34a;
-  border: 1px solid #bbf7d0;
-}
-
-.copyLinkButton:hover {
-  background-color: #16a34a;
-  color: #ffffff;
-  border-color: #16a34a;
-  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.25);
-}
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-  .container {
-    margin: 20px auto;
-    padding: 0 10px;
-  }
-
-  .title {
-    font-size: 1.6rem;
-  }
-
-  .uploadForm {
-    padding: 16px;
-  }
-
-  .dropzone {
-    padding: 24px 12px;
-  }
-
-  .section {
-    padding: 16px;
-  }
-
+@media (max-width: 1000px) {
   .listItem {
+    grid-template-columns: 1fr 1fr;
+  }
+  .fileActions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}
+@media (max-width: 640px) {
+  .title {
+    font-size: 29px;
+  }
+  .section {
+    padding: 18px;
+  }
+  .toolbar {
     flex-direction: column;
     align-items: stretch;
-    gap: 16px;
-    padding: 16px;
   }
-
-  .fileMainInfo {
+  .search {
     width: 100%;
   }
-
-  .commentSection {
-    width: 100%;
-    margin-top: 0;
+  .listItem {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
-
-  .commentText {
-    max-width: 100%;
-    width: 100%;
-    box-sizing: border-box;
+  .uploadDetails {
+    flex-direction: column;
+    align-items: stretch;
   }
-
-  .commentValueWrapper {
-    flex-wrap: wrap;
+  .dropzone {
+    padding: 20px;
   }
-
-  .inlineEditWrapper {
-    max-width: 100%;
-    width: 100%;
-  }
-
-  .fileActions {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    width: 100%;
-    margin-top: 8px;
-    border-top: 1px solid #f1f5f9;
-    padding-top: 12px;
-  }
-
-  .fileActions button,
-  .fileActions span {
-    text-align: center;
-    justify-content: center;
-    width: 100%;
-    margin: 0 !important; /* Убираем боковые отступы */
-    box-sizing: border-box;
-  }
-
-  .shareButton,
-  .shareStatus,
-  .downloadButton,
-  .viewButton,
-  .deleteButton {
-    width: 100%;
-    padding: 10px 8px;
-    font-size: 0.8rem;
+  .fileActions button {
+    padding: 10px;
   }
 }
-

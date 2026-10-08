@@ -1,5 +1,6 @@
+import { FormField } from '../../components/ui/FormField'
 import { useState } from 'react'
-import styles from './RegisterForm.module.css'
+import styles from './AuthForm.module.css'
 import { api } from '../../services/api'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../store/store'
@@ -79,62 +80,74 @@ export const RegisterForm = () => {
 
   return (
     <div className={styles.container}>
-      <h2>Регистрация в MyCloud</h2>
+      <h2>Ваше новое облако</h2>
+      <p className={styles.intro}>
+        Личное пространство для ваших файлов. Начните с создания аккаунта.
+      </p>
 
       {error && <ErrorView message={error} />}
 
       <form className={styles.form} onSubmit={handleSubmit}>
-        <input
+        <FormField
+          label='Логин (буквы и цифры)'
           className={styles.input}
           type='text'
-          placeholder='Логин (буквы и цифры)*'
+          placeholder='Например, morozov'
           required // HTML5 валидация: браузер не даст отправить пустую форму
           value={username}
           onChange={(e) => setUsername(e.target.value)} // На каждый клик обновляем state
           name='username'
-          autoComplete='off'
+          autoComplete='username'
         />
-        <input
+        <FormField
+          label='E-mail'
           className={styles.input}
           type='email'
-          placeholder='E-mail*'
+          placeholder='you@example.com'
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           name='email'
-          autoComplete='off'
+          autoComplete='email'
         />
-        <input
+        <FormField
+          label='Пароль'
           className={styles.input}
           type='password'
-          placeholder='Пароль*'
+          placeholder='Придумайте пароль'
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           name='password'
-          autoComplete='off'
+          autoComplete='new-password'
         />
-        <input
+        <FormField
+          label='Имя (необязательно)'
           className={styles.input}
           type='text'
-          placeholder='Имя (необязательно)' // Для этих полей required НЕ пишем
+          placeholder='Дмитрий'
           value={firstName}
           name='first_name'
-          autoComplete='off'
+          autoComplete='given-name'
           onChange={(e) => setFirstName(e.target.value)}
         />
-        <input
+        <FormField
+          label='Фамилия (необязательно)'
           className={styles.input}
           type='text'
-          placeholder='Фамилия (необязательно)'
+          placeholder='Морозов'
           value={lastName}
           name='last_name'
-          autoComplete='off'
+          autoComplete='family-name'
           onChange={(e) => setLastName(e.target.value)}
         />
         <button className={styles.button} type='submit' disabled={isLoading}>
           {isLoading ? 'Отправка...' : 'Создать аккаунт'}
         </button>
+        <p className={styles.hint}>
+          Логин: 4–20 латинских букв и цифр, начинается с буквы. Пароль: от 6 символов, с заглавной
+          буквой, цифрой и специальным символом.
+        </p>
       </form>
     </div>
   )

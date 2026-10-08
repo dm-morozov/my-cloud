@@ -1,0 +1,149 @@
+.scene {
+  position: relative;
+  padding: 26px 0;
+}
+.caption {
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  color: var(--muted);
+  margin: 0 0 20px 12px;
+}
+.window {
+  background: white;
+  border: 1px solid #d8dfd5;
+  border-radius: 10px;
+  box-shadow: 12px 16px 0 #e0e7dc;
+  overflow: hidden;
+  transform: rotate(-2deg);
+}
+.top {
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 600;
+}
+.top > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.avatar {
+  background: var(--accent-soft);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+}
+.heading {
+  padding: 28px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.heading small {
+  font-size: 8px;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+}
+.heading h2 {
+  margin: 8px 0 0;
+  font-size: 25px;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+}
+.heading > svg {
+  color: var(--accent);
+}
+.tableLabel {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 24px;
+  background: #fafbf8;
+  color: var(--muted);
+  font-size: 10px;
+}
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--line);
+}
+.row > span:first-child {
+  padding: 9px;
+  border-radius: 5px;
+}
+.sand {
+  background: #f4eee3;
+  color: #94743d;
+}
+.sage {
+  background: #e8eee8;
+  color: var(--accent);
+}
+.stone {
+  background: #edefee;
+  color: #64736b;
+}
+.row strong {
+  font-weight: 500;
+  font-size: 12px;
+}
+.row small {
+  display: block;
+  margin-top: 6px;
+  font-size: 9px;
+  color: var(--muted);
+}
+.row > span:last-child {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.space {
+  padding: 22px 24px;
+  font-size: 9px;
+  color: var(--muted);
+}
+.space div {
+  height: 3px;
+  background: var(--accent-soft);
+  margin-top: 10px;
+}
+.space i {
+  width: 8.2%;
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+.footnote {
+  margin-top: 32px;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.footnote span {
+  margin-right: 12px;
+}
+@media (max-width: 640px) {
+  .scene {
+    padding: 8px 6px 8px 0;
+  }
+  .window {
+    transform: none;
+    box-shadow: 6px 8px 0 #e0e7dc;
+  }
+  .row {
+    padding: 16px;
+    gap: 10px;
+  }
+  .row strong {
+    font-size: 11px;
+  }
+}

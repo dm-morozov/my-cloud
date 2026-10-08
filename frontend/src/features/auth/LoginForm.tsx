@@ -1,5 +1,6 @@
+import { FormField } from '../../components/ui/FormField'
 import { Link, useNavigate } from 'react-router-dom'
-import styles from './LoginForm.module.css'
+import styles from './AuthForm.module.css'
 import { useState } from 'react'
 import ErrorView from '../../components/ErrorView/ErrorView'
 import { useAppDispatch } from '../../store/store'
@@ -54,25 +55,28 @@ export const LoginForm = () => {
 
   return (
     <div className={styles.container}>
-      <h2>Выполните авторизацию</h2>
+      <h2>Войти в My Cloud</h2>
+      <p className={styles.intro}>С возвращением. Ваши файлы на своём месте.</p>
       {error && <ErrorView message={error} />}
 
       <form className={styles.form} onSubmit={handleSubmit}>
-        <input
+        <FormField
+          label='Логин'
           className={styles.input}
           name='username'
           type='text'
-          placeholder='Логин'
-          autoComplete='off'
+          placeholder='Ваш логин'
+          autoComplete='username'
           value={username}
           onChange={(event) => setUsername(event.target.value)}
         />
-        <input
+        <FormField
+          label='Пароль'
           className={styles.input}
           name='password'
           type='password'
-          placeholder='Пароль'
-          autoComplete='off'
+          placeholder='Ваш пароль'
+          autoComplete='current-password'
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />

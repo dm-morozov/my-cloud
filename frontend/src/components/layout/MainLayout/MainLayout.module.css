@@ -1,19 +1,19 @@
-/* Делаем так, чтобы весь каркас занимал минимум 100% высоты экрана (100vh) */
 .layout {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
-
-/* flex-grow: 1 заставляет <main> занять всё свободное пространство, выталкивая футер вниз */
 .main {
-  flex-grow: 1;
-  background-color: #f8f9fa; /* Мягкий фон для всех страниц */
+  flex: 1;
+  background: radial-gradient(ellipse at 95% 0, #e9eee4, transparent 55%), var(--paper);
 }
-
-/* Ограничиваем ширину контента и задаем внутренние отступы */
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px;
+  width: min(1240px, 100%);
+  margin: auto;
+  padding: 48px 40px 72px;
+}
+@media (max-width: 640px) {
+  .container {
+    padding: 30px 20px 48px;
+  }
 }

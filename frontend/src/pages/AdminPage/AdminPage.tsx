@@ -175,15 +175,16 @@ export const AdminPage = () => {
                       : '—'}
                   </td>
                   <td>
-                    <span
+                    <button
+                      type='button'
                       className={`${styles.badge} ${user.is_staff ? styles.badgeAdmin : styles.badgeUser} ${styles.badgeInteractive}`}
                       onClick={(e) => handleToggleRoleClick(e, user)}
                       title={
                         user.is_staff ? 'Снять права администратора' : 'Сделать администратором'
                       }
                     >
-                      {user.is_staff ? '⭐ Админ' : 'Пользователь'}
-                    </span>
+                      {user.is_staff ? 'Администратор' : 'Пользователь'}
+                    </button>
                   </td>
 
                   <td>{user.files_count}</td>
@@ -208,7 +209,11 @@ export const AdminPage = () => {
             {/* Шапка с именем и кнопкой закрытия */}
             <div className={styles.panelHeader}>
               <h2 className={styles.panelTitle}>Файлы {selectedUser.username}</h2>
-              <button className={styles.closeButton} onClick={() => dispatch(selectUser(null))}>
+              <button
+                aria-label='Закрыть файлы пользователя'
+                className={styles.closeButton}
+                onClick={() => dispatch(selectUser(null))}
+              >
                 ✕
               </button>
             </div>

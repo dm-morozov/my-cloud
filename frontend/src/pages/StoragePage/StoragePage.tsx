@@ -1,6 +1,7 @@
 import { api } from '../../services/api'
 import type { AxiosError } from 'axios'
-import { useEffect, useRef, useState } from 'react'
+import { useDeferredValue, useEffect, useRef, useState } from 'react'
+import { Icon } from '../../components/ui/Icon'
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import {
   fetchFiles,
@@ -57,6 +58,11 @@ export const StoragePage = () => {
   const [deleteTarget, setDeleteTarget] = useState<{ id: number; name: string } | null>(null)
 
   const { isLoading, items, error } = useAppSelector((state) => state.files)
+  const [search, setSearch] = useState('')
+  const deferredSearch = useDeferredValue(search)
+  const visibleFiles = items.filter((file) =>
+    file.original_name.toLocaleLowerCase().includes(deferredSearch.trim().toLocaleLowerCase())
+  )
 
   // Состояния для редактирования имени и комментария
 
@@ -242,7 +248,7 @@ export const StoragePage = () => {
       const publicUrl = `${backendBase}/api/public/files/${token}/`
 
       // Копируем ссылку в буфер обмена браузера
-      await copyToClipboard(publicUrl)
+      if (!(await copyToClipboard(publicUrl))) throw new Error('Не удалось скопировать ссылку')
       // Показываем уведомление на 2 секунды
       setCopiedFileId(fileId)
       setTimeout(() => {
@@ -257,7 +263,11 @@ export const StoragePage = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Хранилище</h1>
+      <h1 className={styles.title}>Мои файлы</h1>
+      <p className={styles.summary}>
+        {items.length} файлов · {formatBytes(items.reduce((total, file) => total + file.size, 0))}{' '}
+        из 100 МиБ · до 20 МиБ на файл
+      </p>
 
       {/* Форма загрузки нового файла */}
       <form onSubmit={handleUploadSubmit} className={styles.uploadForm}>
@@ -268,6 +278,15 @@ export const StoragePage = () => {
           onDragOver={handleDrag}
           onDrop={handleDrop}
           onClick={onDropzoneClick}
+          role='button'
+          tabIndex={0}
+          aria-label='Выбрать файл для загрузки'
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault()
+              onDropzoneClick()
+            }
+          }}
         >
           {/* Скрытый стандартный инпут */}
           <input
@@ -278,7 +297,9 @@ export const StoragePage = () => {
           />
 
           <div className={styles.dropzoneContent}>
-            <span className={styles.uploadIcon}>☁️</span>
+            <span className={styles.uploadIcon}>
+              <Icon name='upload' width='28' height='28' />
+            </span>
             {selectedFile ? (
               <p className={styles.dropzoneText}>
                 Выбран файл: <strong>{selectedFile.name}</strong> ({formatBytes(selectedFile.size)})
@@ -322,15 +343,30 @@ export const StoragePage = () => {
 
       {!isLoading && !error && (
         <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>Список файлов в облаке:</h3>
-          {items.length === 0 ? (
+          <div className={styles.toolbar}>
+            <h2 className={styles.sectionTitle}>Все файлы</h2>
+            <input
+              className={styles.search}
+              type='search'
+              aria-label='Найти файл'
+              placeholder='Найти по названию'
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+          </div>
+          {visibleFiles.length === 0 ? (
             <p className={styles.emptyList}>
-              Хранилище файлов постое. <br />
-              Добавьте первый файл.
+              {items.length === 0
+                ? 'Здесь пока нет файлов.'
+                : 'По вашему запросу ничего не найдено.'}{' '}
+              <br />
+              {items.length === 0
+                ? 'Перетащите первый файл в область загрузки.'
+                : 'Попробуйте другое название.'}
             </p>
           ) : (
             <ul className={styles.list}>
-              {items.map((file) => (
+              {visibleFiles.map((file) => (
                 <li key={file.id} className={styles.listItem}>
                   <div className={styles.fileMainInfo}>
                     {/* Если редактируем имя данного файла */}
@@ -390,7 +426,7 @@ export const StoragePage = () => {
                           className={styles.iconBtn}
                           title='Переименовать'
                         >
-                          ✏️
+                          <Icon name='edit' width='14' height='14' />
                         </button>
                       </span>
                     )}
@@ -399,7 +435,7 @@ export const StoragePage = () => {
                       {/* Если файл публичный — выводим красивую плашку */}
                       {file.public_token && (
                         <span className={styles.publicBadge} title='Файл доступен по ссылке'>
-                          🌐 Публичный
+                          По ссылке
                         </span>
                       )}
                     </span>
@@ -456,7 +492,7 @@ export const StoragePage = () => {
                               className={styles.iconBtn}
                               title='Редактировать комментарий'
                             >
-                              ✏️
+                              <Icon name='edit' width='14' height='14' />
                             </button>
                           </div>
                         ) : (
@@ -475,7 +511,7 @@ export const StoragePage = () => {
                   <div className={styles.fileActions}>
                     {/*Кнопка поделиться*/}
                     {copiedFileId === file.id ? (
-                      <span className={styles.shareStatus}>🔗 Ссылка скопирована! </span>
+                      <span className={styles.shareStatus}>Ссылка скопирована </span>
                     ) : (
                       <button
                         // Если файл уже публичный, добавляем класс copyLinkButton, иначе shareButton
@@ -487,7 +523,7 @@ export const StoragePage = () => {
                             : 'Сделать файл доступным по ссылке'
                         }
                       >
-                        {file.public_token ? '📋' : '🔗'}
+                        <Icon name='link' width='16' height='16' />
                       </button>
                     )}
 
@@ -496,19 +532,19 @@ export const StoragePage = () => {
                       onClick={() => dispatch(viewFileInline({ fileId: file.id }))}
                       title='Открыть в браузере (просмотр)'
                     >
-                      👁️
+                      Просмотр
                     </button>
                     <button
                       className={styles.downloadButton}
                       onClick={() => handleDownload(file.id, file.original_name)}
                     >
-                      ⬇️
+                      Скачать
                     </button>
                     <button
                       onClick={() => handleDeleteClick(file.id, file.original_name)}
                       className={styles.deleteButton}
                     >
-                      🗑️
+                      Удалить
                     </button>
                   </div>
                 </li>

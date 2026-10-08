@@ -1,3 +1,5 @@
+import styles from './ErrorView.module.css'
+
 interface ErrorViewProps {
   message: string
   onRetry?: () => void
@@ -11,8 +13,8 @@ interface ErrorViewProps {
  */
 const ErrorView = ({ message, onRetry }: ErrorViewProps) => {
   return (
-    <div>
-      <div className='text-center text-danger'>{message}</div>
+    <div className={styles.error} role='alert'>
+      <div>{message}</div>
       {onRetry && typeof onRetry === 'function' && (
         <button onClick={onRetry}>Повторить запрос</button>
       )}

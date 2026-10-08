@@ -1,4 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Icon } from '../../ui/Icon'
 import { useAppDispatch, useAppSelector } from '../../../store/store'
 import styles from './Header.module.css'
 import { logoutUser } from '../../../store/authSlice'
@@ -20,12 +21,14 @@ export const Header = () => {
     <header className={styles.header}>
       <div className={styles.container}>
         <div className={styles.logo}>
-          <Link to='/'>☁️ MyCloud</Link>
+          <Link to='/'>
+            <Icon name='cloud' /> My Cloud
+          </Link>
         </div>
         <nav className={styles.nav}>
-          <Link to='/' className={styles.link}>
+          <NavLink to='/' end className={styles.link}>
             Главная
-          </Link>
+          </NavLink>
           {!isAuthenticated ? (
             <>
               <Link to='/login' className={styles.link}>

@@ -1,24 +1,84 @@
-/* 1. Сброс базовых отступов (CSS Reset) */
-html, body {
-  margin: 0;
-  padding: 0;
+:root {
+  --paper: #f5f4ef;
+  --surface: #fff;
+  --ink: #222c29;
+  --muted: #6c7670;
+  --line: #dce1da;
+  --accent: #245a45;
+  --accent-soft: #e8eee8;
+  --danger: #aa4035;
+  font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  font-synthesis: none;
+}
+* {
   box-sizing: border-box;
 }
-
-/* 2. Глобальные стили для всего приложения */
 body {
-  /* Задаем шрифт ОДИН РАЗ здесь, и он применяется ко всему приложению */
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  
-  /* Делаем фон чуть-чуть сероватым, чтобы белые карточки выделялись */
-  background-color: #f8f9fa; 
-  
-  /* Сглаживание шрифтов на Mac/Windows */
+  margin: 0;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
-
-/* Чтобы box-sizing наследовался на все элементы */
-*, *::before, *::after {
-  box-sizing: inherit;
+button,
+input,
+textarea {
+  font: inherit;
+}
+button,
+a,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+a {
+  color: inherit;
+}
+a,
+button,
+input,
+textarea {
+  transition:
+    background-color 0.18s,
+    border-color 0.18s,
+    color 0.18s;
+}
+:focus-visible {
+  outline: 3px solid #96b69a;
+  outline-offset: 4px;
+}
+input,
+textarea {
+  min-width: 0;
+}
+svg {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+::selection {
+  background: #cddfc8;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.form-field > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }

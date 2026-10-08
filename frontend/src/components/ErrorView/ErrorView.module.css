@@ -1,0 +1,17 @@
+.error {
+  border-left: 3px solid var(--danger);
+  padding: 14px 16px;
+  background: #f8eeea;
+  color: #84392f;
+  margin: 16px 0;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.error button {
+  border: 1px solid #d9b8ae;
+  background: transparent;
+  padding: 7px 12px;
+  border-radius: 4px;
+  margin-top: 10px;
+}

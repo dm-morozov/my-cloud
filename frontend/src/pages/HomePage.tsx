@@ -1,93 +1,75 @@
 import { Link } from 'react-router-dom'
 import { useAppSelector } from '../store/store'
+import { Icon } from '../components/ui/Icon'
+import { StoragePreview } from '../components/StoragePreview/StoragePreview'
 import styles from './HomePage.module.css'
 
-export const HomePage = () => {
-  const { isAuthenticated, user } = useAppSelector((state) => state.auth)
+const features = [
+  {
+    number: '01',
+    title: 'Сохранить',
+    text: 'Документы, фотографии и рабочие материалы. Перетащите файл — и он уже в вашем облаке.',
+  },
+  {
+    number: '02',
+    title: 'Найти',
+    text: 'Все файлы в одном месте. Понятные имена, комментарии и быстрый доступ без лишних папок.',
+  },
+  {
+    number: '03',
+    title: 'Поделиться',
+    text: 'Отправьте ссылку коллеге или другу. Получателю не нужен аккаунт, чтобы скачать файл.',
+  },
+]
 
+export const HomePage = () => {
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
   return (
     <div className={styles.homePage}>
-      {/* Герой-секция */}
       <section className={styles.hero}>
-        <h1 className={styles.heroTitle}>Ваше персональное облачное хранилище</h1>
-        <p className={styles.heroSubtitle}>
-          Безопасное, быстрое и удобное место для хранения ваших файлов. Загружайте документы,
-          делитесь ссылками и управляйте доступом в один клик.
-        </p>
-        <div className={styles.actions}>
-          {isAuthenticated ? (
-            <Link to='/storage' className={styles.primaryBtn}>
-              Перейти в хранилище {user?.first_name ? `, ${user.first_name}` : ''} →
+        <div className={styles.intro}>
+          <span className={styles.eyebrow}>ВАШЕ ЛИЧНОЕ ПРОСТРАНСТВО</span>
+          <h1>
+            Важные файлы.
+            <br />
+            <em>Всегда под рукой.</em>
+          </h1>
+          <p className={styles.description}>
+            Соберите документы, идеи и фотографии в одном месте. Открывайте, сохраняйте и делитесь —
+            без лишних действий.
+          </p>
+          <div className={styles.actions}>
+            <Link className={styles.primaryBtn} to={isAuthenticated ? '/storage' : '/register'}>
+              {isAuthenticated ? 'Открыть хранилище' : 'Создать своё облако'} <Icon name='arrow' />
             </Link>
-          ) : (
-            <>
-              <Link to='/register' className={styles.primaryBtn}>
-                Начать использование
+            {!isAuthenticated && (
+              <Link className={styles.secondaryBtn} to='/login'>
+                Уже есть аккаунт?
               </Link>
-              <Link to='/login' className={styles.secondaryBtn}>
-                Войти в аккаунт
-              </Link>
-            </>
-          )}
+            )}
+          </div>
+          <p className={styles.note}>100 МиБ для ваших файлов · до 20 МиБ на файл</p>
         </div>
+        <StoragePreview />
       </section>
-
-      {/* Секция статистики */}
-      <section className={styles.statsSection}>
-        <div className={styles.statItem}>
-          <div className={styles.statValue}>20 МиБ</div>
-          <div className={styles.statLabel}>Максимальный размер файла</div>
-        </div>
-        <div className={styles.statItem}>
-          <div className={styles.statValue}>100%</div>
-          <div className={styles.statLabel}>Контроль над данными</div>
-        </div>
-        <div className={styles.statItem}>
-          <div className={styles.statValue}>Мгновенно</div>
-          <div className={styles.statLabel}>Генерация публичных ссылок</div>
-        </div>
+      <section className={styles.features} aria-label='Как работает My Cloud'>
+        {features.map((feature) => (
+          <article key={feature.number}>
+            <span>{feature.number}</span>
+            <h2>{feature.title}</h2>
+            <p>{feature.text}</p>
+          </article>
+        ))}
       </section>
-
-      {/* Секция преимуществ */}
-      <section className={styles.featuresSection}>
-        <h2 className={styles.sectionTitle}>Возможности платформы</h2>
-        <div className={styles.featuresGrid}>
-          <div className={styles.featureCard}>
-            <div className={styles.iconWrapper}>📁</div>
-            <h3>Управление файлами</h3>
-            <p>
-              Удобный интерфейс для загрузки, скачивания, переименования и удаления файлов любых
-              форматов.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <div className={styles.iconWrapper}>🔗</div>
-            <h3>Публичный доступ</h3>
-            <p>
-              Генерируйте уникальные публичные ссылки, чтобы делиться своими файлами с друзьями и
-              коллегами.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <div className={styles.iconWrapper}>👁️</div>
-            <h3>Быстрый просмотр</h3>
-            <p>
-              Просматривайте изображения, PDF и текстовые документы прямо в браузере без
-              необходимости скачивания.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <div className={styles.iconWrapper}>🛡️</div>
-            <h3>Админ-панель</h3>
-            <p>
-              Специальный интерфейс для администраторов системы для управления пользователями и их
-              файловым пространством.
-            </p>
-          </div>
-        </div>
+      <section className={styles.closing}>
+        <p>
+          Меньше поисков.
+          <br />
+          Больше порядка.
+        </p>
+        <Link to={isAuthenticated ? '/storage' : '/register'}>
+          Перейти к файлам <Icon name='arrow' />
+        </Link>
       </section>
     </div>
   )

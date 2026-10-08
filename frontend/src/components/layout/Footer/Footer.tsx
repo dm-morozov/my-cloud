@@ -1,57 +1,23 @@
-import { Link } from 'react-router-dom'
-import { useAppSelector } from '../../../store/store'
+import { projectLinks } from '../../../config/project'
 import styles from './Footer.module.css'
 
-export const Footer = () => {
-  const currentYear = new Date().getFullYear()
-  const { isAuthenticated, user } = useAppSelector((state) => state.auth)
-
-  return (
-    <footer className={styles.footer}>
-      <div className={styles.container}>
-        {/* Левая часть - О проекте */}
-        <div className={styles.brandSection}>
-          <h3>☁️ MyCloud</h3>
-          <p>
-            Надежное облачное хранилище для ваших файлов. Дипломный проект по профессии
-            "Fullstack-разработчик на Python".
-          </p>
-        </div>
-
-        {/* Правая часть - Ссылки */}
-        <div className={styles.linksSection}>
-          <div className={styles.column}>
-            <h4>Навигация</h4>
-            <Link to='/'>Главная</Link>
-            {!isAuthenticated ? (
-              <>
-                <Link to='/login'>Вход</Link>
-                <Link to='/register'>Регистрация</Link>
-              </>
-            ) : (
-              <>
-                <Link to='/storage'>Мои файлы</Link>
-                {user?.is_staff && <Link to='/admin'>Админ-панель</Link>}
-              </>
-            )}
-          </div>
-          <div className={styles.column}>
-            <h4>Разработчик</h4>
-            {/* Замени на ссылку на свой реальный профиль */}
-            <a href='https://github.com/dm-morozov' target='_blank' rel='noreferrer'>
-              Профиль GitHub
-            </a>
-            <a href='https://netology.ru' target='_blank' rel='noreferrer'>
-              Нетология
-            </a>
-          </div>
-        </div>
+export const Footer = () => (
+  <footer className={styles.footer}>
+    <div className={styles.container}>
+      <div>
+        <strong>My Cloud</strong>
+        <p>Место для того, что важно.</p>
       </div>
-
-      {/* Самый низ футера - копирайт */}
-      <div className={styles.bottomBar}>
-        <p>© {currentYear} MyCloud (Дмитрий Морозов). Все права защищены.</p>
+      <div className={styles.author}>
+        <span>Дмитрий Морозов</span>
+        <a href={projectLinks.telegram} target='_blank' rel='noreferrer'>
+          Telegram ↗
+        </a>
+        <a href={projectLinks.repository} target='_blank' rel='noreferrer'>
+          GitHub ↗
+        </a>
       </div>
-    </footer>
-  )
-}
+      <span className={styles.copyright}>© {new Date().getFullYear()} My Cloud</span>
+    </div>
+  </footer>
+)
